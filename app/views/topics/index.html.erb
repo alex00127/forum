@@ -1,7 +1,16 @@
 <h1>AlphaCamp Forum</h1>
 
+<%= form_tag topics_path, :method => :get do %>
+  <%= text_field_tag "keyword" %>
+  <%= submit_tag "Search" %>
+<% end %>
 
-<%= link_to "New Post", new_topic_path() , :class => "btn btn-primary"%>
+
+<p><%= link_to "New Post", new_topic_path() , :class => "btn btn-primary"%></p>
+<p>
+<%= link_to 'Sort by Title', topics_path( :order => "title") %>
+<%= link_to 'Sort by last Comment Time', topics_path %>
+</p>
 <table>
   <tr>
       <td><h4>文章主題</h4></td>
@@ -25,3 +34,4 @@
   <% end %>
 
 </table>
+<%= paginate @topics %>

@@ -5,8 +5,19 @@ class TopicsController < ApplicationController
 
 
 	def index
-		@topics = Topic.all
-	end
+    
+    if params[:keyword]
+      @topics = Topic.where( [ "title like ?", "%#{params[:keyword]}%" ] )
+    else
+      @topics = Topic.all
+    end
+
+      #@topics = @topics.page(params[:page]).per(5)
+      sort_by = (params[:order] == 'title') ? 'title' : 'last_comment_time'
+      @topics = Topic.order(sort_by).page(params[:page]).per(5)
+	
+
+  end
   
 
 
@@ -16,12 +27,13 @@ class TopicsController < ApplicationController
 
   def show
   	@comments = @topic.comments 
-    @comment = Comment.new
+    
 
   	#@a = Comment.find(params[:id])
   	if params[:comment_id]
-      @edit_comment = Comment.find(params[:comment_id])
-
+      @comment = Comment.find(params[:comment_id])
+    else
+      @comment = Comment.new
     end
  
   end
@@ -76,7 +88,7 @@ class TopicsController < ApplicationController
   private
 
   def topic_params
-  	params.require(:topic).permit(:title, :content, :category_id)
+  	params.require(:topic).permit(:title, :content, :category_ids => [])
 
   end
 

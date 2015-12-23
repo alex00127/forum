@@ -1,4 +1,5 @@
 class Category < ActiveRecord::Base
-	has_many :topics
+	has_many :topic_categoryships
+	has_many :topics, :through => :topic_categoryships
 
 end

@@ -2,8 +2,13 @@
 
 <p><h4>作者: <%= @topic.user.try(:user_name) %></h4> </p>
 
-<p><h4>分類:<%= @topic.category_name %></h4> </p>
-
+<h4>分類:
+<ul>
+<%= @topic.categories.each do |c| %>
+  <li><%= c.name %></li>
+ 
+<% end %>
+</ul>
 
 <p><h3>內容:</h3></p>
 
@@ -23,7 +28,7 @@
     
 
     <% if params[:comment_id] == c.id.to_s %>
-      <%= form_for @edit_comment, :url => topic_comment_path(@topic,@edit_comment ) do |f| %>
+      <%= form_for @comment, :url => topic_comment_path(@topic,@comment ) do |f| %>
         <div class = "form-group">
         <!--<%= f.label :content, "修改" %> -->
         <%= f.text_area :content ,:class => "form-control"%>
