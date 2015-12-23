@@ -1,0 +1,23 @@
+<% if @topic.errors.any? %>
+      <ul>
+      <% @topic.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+<% end %>
+
+<div class="form-group">
+  <%= f.label :title, "Title" %>
+  <%= f.text_field :title , :class => "form-control" %>
+</div>
+
+<div class="form-group">
+  <%= f.label :category_id, "Category" %>
+  <%= f.collection_select(:category_id, Category.all, :id, :name, :include_blank =>"Please Select") %>
+</div>
+
+
+<div class="form-group">
+  <%= f.label :content, "Content" %>
+  <%= f.text_area :content , :class => "form-control"%>
+</div>
