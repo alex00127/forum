@@ -1,7 +1,21 @@
 Rails.application.routes.draw do
   devise_for :users
+ 
   resources :topics do
     resources :comments, :controller => 'topic_comments'
+ 
+  collection do
+    get :statistic
+  end
+
+  end
+
+  resources :users do
+    resource :profile, :controller => 'user_profiles'
+  end
+
+  namespace :admin do
+   resources :topics
   end
 
 

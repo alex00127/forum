@@ -2,11 +2,11 @@
 
 <p><h4>作者: <%= @topic.user.try(:user_name) %></h4> </p>
 
-<h4>分類:
+<h4>分類:</h4>
 <ul>
-<%= @topic.categories.each do |c| %>
-  <li><%= c.name %></li>
- 
+<% @topic.categories.each do |c| %>
+  <h4><li><%= c.name %></li></h4>
+
 <% end %>
 </ul>
 

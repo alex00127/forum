@@ -12,6 +12,8 @@
   <div class="row">
     <div class="col-md-12">
 
+    <h1>Admin Interface</h1>
+
     <% if flash[:notice].present? %>
       <div class="alert alert-success" role="alert">
         <%= flash[:notice] %>
@@ -41,9 +43,6 @@
       <%= yield %>
 
       <%= link_to "admin", admin_topics_path %>
-      <p><%= link_to "本站統計數據", statistic_topics_path %></p>
-    </div>
-  </div>
 
-</body>
-</html>
+</div>
+</div>

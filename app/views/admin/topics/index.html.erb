@@ -1,0 +1,13 @@
+<h1>文章列表</h1>
+
+<ul>
+
+<% @topics.each do |t| %>
+  <li><%= t.title %></li>
+<% end %>
+</ul>
+
+<%= link_to "New topic" , new_admin_topic_path() ,:class => "btn btn-pimary" %>
+
+
+<p><%= link_to "Back To Index", topics_path %></p>

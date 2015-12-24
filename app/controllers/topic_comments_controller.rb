@@ -10,6 +10,7 @@ def create
 
   if @comment.save
     #@topic.last_comment_time = @comment.created_at
+    @topic.comment_count = @topic.comments.size
     @topic.save!
   	redirect_to topic_path(@topic)
   else
@@ -19,14 +20,18 @@ end
 
 def destroy
 	@comment = @topic.comments.find(params[:id])
+
 	@comment.destroy
+  @topic.comment_count = @topic.comments.size
+  @topic.save!
 	redirect_to topic_path(@topic)
 end
 
 def update
   @comment = @topic.comments.find(params[:id])
-
+ 
   if @comment.update(comment_params)
+    
     redirect_to topic_path(@topic)
   else
     redirect_to topic_path(@topic)

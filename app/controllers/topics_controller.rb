@@ -8,38 +8,44 @@ class TopicsController < ApplicationController
     
     if params[:keyword]
       @topics = Topic.where( [ "title like ?", "%#{params[:keyword]}%" ] )
+                               # title like 是sql寫法
+
     else
       @topics = Topic.all
     end
 
       #@topics = @topics.page(params[:page]).per(5)
-      sort_by = (params[:order] == 'title') ? 'title' : 'last_comment_time'
-      @topics = Topic.order(sort_by).page(params[:page]).per(5)
-	
+      #sort_by = (params[:order] == 'title') ? 'title' : 'comment_count'
+      if (params[:order])
+        sort_by = (params[:order])
+      else
+        sort_by = 'title'
+      end
+  
+
+      @topics = Topic.order(sort_by +' DESC').page(params[:page]).per(5)
+	    #@user = current_user
 
   end
   
 
 
-
-
-
-
   def show
   	@comments = @topic.comments 
     
-
   	#@a = Comment.find(params[:id])
   	if params[:comment_id]
       @comment = Comment.find(params[:comment_id])
     else
       @comment = Comment.new
     end
+
+    if params[:view]
+      @topic.view +=1
+      @topic.save
+    end
  
   end
-
-
-
 
 
 	def new
@@ -48,7 +54,7 @@ class TopicsController < ApplicationController
 
 	def create
 		@topic = Topic.new(topic_params)
-
+    @topic.view = 0
 		@topic.user = current_user
 
 		if @topic.save
@@ -82,6 +88,10 @@ class TopicsController < ApplicationController
   	@topic.destroy
   	flash[:alert] = "event was successfully deleted"
   	redirect_to :action => :index
+  end
+
+  def statistic
+    #@topic = Topic.find(params[:id])
   end
 
 
