@@ -11,7 +11,13 @@ class TopicsController < ApplicationController
                                # title like 是sql寫法
 
     else
-      @topics = Topic.all
+     
+        if (params[:category])
+          @category = Category.find(params[:category])
+          @topics = @category.topics
+        else
+           @topics = Topic.all
+        end
     end
 
       #@topics = @topics.page(params[:page]).per(5)
@@ -22,8 +28,14 @@ class TopicsController < ApplicationController
         sort_by = 'title'
       end
   
+     
+      @topics = @topics.order(sort_by +' DESC').page(params[:page]).per(5)
 
-      @topics = Topic.order(sort_by +' DESC').page(params[:page]).per(5)
+
+      
+
+      #raise
+
 	    #@user = current_user
 
   end

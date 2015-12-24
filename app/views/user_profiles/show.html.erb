@@ -56,7 +56,7 @@
    <h2>發表過的回覆:</h2>
         <ul>
      <% @user.comments.each do |c|%>
-       <li>曾經於"<%= link_to c.topic.title, topic_path(c.topic) %>"文章</li>
+       <li>曾經於文章: "<%= link_to c.topic.title, topic_path(c.topic) %>"</li>
        <p>回應:<%= "  " + c.content %></p>
 
      <% end %>
