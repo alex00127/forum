@@ -3,10 +3,16 @@ Rails.application.routes.draw do
  
   resources :topics do
     resources :comments, :controller => 'topic_comments'
+    #resources :categories, :controller => 'topic_comments'
  
-  collection do
-    get :statistic
-  end
+    collection do
+      get :statistic
+    end
+
+    member do
+      post :collect
+      post :non_collect
+    end
 
   end
 
@@ -16,7 +22,11 @@ Rails.application.routes.draw do
 
   namespace :admin do
    resources :topics
+   resources :categories
+   resources :users
   end
+
+  
 
 
   root 'topics#index'

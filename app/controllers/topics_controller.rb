@@ -9,9 +9,7 @@ class TopicsController < ApplicationController
     if params[:keyword]
       @topics = Topic.where( [ "title like ?", "%#{params[:keyword]}%" ] )
                                # title like 是sql寫法
-
-    else
-     
+    else   
         if (params[:category])
           @category = Category.find(params[:category])
           @topics = @category.topics
@@ -22,22 +20,15 @@ class TopicsController < ApplicationController
 
       #@topics = @topics.page(params[:page]).per(5)
       #sort_by = (params[:order] == 'title') ? 'title' : 'comment_count'
-      if (params[:order])
-        sort_by = (params[:order])
-      else
-        sort_by = 'title'
-      end
-  
-     
-      @topics = @topics.order(sort_by +' DESC').page(params[:page]).per(5)
-
-
-      
-
+    if (params[:order])
+      sort_by = (params[:order])
+    else
+      sort_by = 'title'
+    end
+    @topics = @topics.where("status = 'Publish'").order(sort_by +' DESC').page(params[:page]).per(5)
       #raise
-
-	    #@user = current_user
-
+      
+	  
   end
   
 
@@ -65,16 +56,20 @@ class TopicsController < ApplicationController
 	end
 
 	def create
+    #status = (params[:commit] == 'Publish') ? 'publish' : 'draft'
+   
 		@topic = Topic.new(topic_params)
     @topic.view = 0
 		@topic.user = current_user
+    @topic.status = params[:commit]
 
-		if @topic.save
-		  redirect_to topics_path
-		  flash[:notice] = "event was successfully created"
-		else
-			render :action => :new
-		end
+    if @topic.save
+      redirect_to topics_path
+      flash[:notice] = "Topic was successfully created"
+    else
+      render :action => :new
+    end
+
   end
 
 
@@ -83,28 +78,50 @@ class TopicsController < ApplicationController
 
 
 	def update
-		if @topic.update(topic_params)
+    status = (params[:commit] == 'Draft') ? 'Draft' : 'Publish'
+		if status == 'Publish'
+      @topic.status = 'Publish'
+    end
+
+    if @topic.update(topic_params)
 		  redirect_to topics_path
-		  flash[:notice] = "event was successfully updated"
+		  flash[:notice] = "Topic was successfully updated"
 		else
 			render :action => :edit
 		end
+
+
     
 	end
 
 
 
-
-
   def destroy
   	@topic.destroy
-  	flash[:alert] = "event was successfully deleted"
+  	flash[:alert] = "Topic was successfully deleted"
   	redirect_to :action => :index
   end
 
   def statistic
     #@topic = Topic.find(params[:id])
   end
+
+
+def collect
+  @topic = Topic.find(params[:id])
+  @collectship = Collectship.find_or_create_by( :topic => @topic, :user => current_user )
+
+  redirect_to :back
+end
+
+def non_collect
+  @topic = Topic.find(params[:id])
+  @collectship = Collectship.find_by( :topic => @topic, :user => current_user )
+  @collectship.destroy
+
+  redirect_to :back
+end
+
 
 
   private

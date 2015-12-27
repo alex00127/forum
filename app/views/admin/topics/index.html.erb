@@ -1,13 +1,66 @@
-<h1>文章列表</h1>
+<h1>文章分類管理區</h1>
 
-<ul>
+    <h3>類別:</h3>
 
-<% @topics.each do |t| %>
-  <li><%= t.title %></li>
+  <% @categories.each do |c| %>
+    <ul>
+      <% if @category == c %>
+        <%= form_for c, :url => admin_category_path(@category), :method=>:patch do |f| %>
+          <div class="form-group">
+            <%= f.label :name, "編輯分類名稱:" %>
+            <%= f.text_field :name , :class => "form-control" %>
+          </div>
+          <%= f.submit "更新" ,:class => "btn btn-primary"%>
+        <% end %>  
+      <%else%>
+        <li><%= c.name %></li>
+          <%= link_to "編輯", admin_topics_path(:category_id=>c), :class => "btn btn-default" %>
+          <% unless TopicCategoryship.find_by(:category=>c) %>
+            <%= link_to "刪除", admin_category_path(c), :method=>"delete", :class => "btn btn-danger" %>
+          <% end %>  
+      <% end %>
+    </ul>
+  <% end %>
+
+<% unless params[:category_id] %>
+  <%= form_for @category, :url => admin_categories_path() do |f| %>
+    <div class="form-group">
+      <%= f.label :name, "新增分類名稱:" %>
+      <%= f.text_field :name , :class => "form-control" %>
+    </div>
+    <%= f.submit "新增" ,:class => "btn btn-primary"%>
+  <% end %>   
 <% end %>
-</ul>
-
-<%= link_to "New topic" , new_admin_topic_path() ,:class => "btn btn-pimary" %>
 
 
-<p><%= link_to "Back To Index", topics_path %></p>
+<h1>使用者管理區</h1>
+<table class = "table">
+    <tr>
+      <td>使用者名稱</td>
+      <td>Email</td>
+      <td>權限</td>
+      <td>發文次數</td>
+      <td>回文次數</td>
+      <td>動作</td>
+    </tr>
+
+
+    <% @users.each do |u| %>
+      <tr>
+        <td><%= u.user_name %></td>
+        <td><%= u.email %></td>
+        <td><%= u.role %></td>
+        <td><%= u.topics.size %></td>
+        <td><%= u.comments.size %></td> 
+        <td>
+          <%= link_to "編輯", edit_admin_user_path(u), :class => "btn btn-default" %>
+          <%= link_to "刪除", admin_user_path(u), :method=>"delete", :class => "btn btn-danger" %> 
+        </td>
+      </tr>
+    <% end %>
+  
+</table>
+
+
+
+

@@ -27,7 +27,7 @@
 
       <% if current_user %>
 
-          Hi, <%=current_user.email %>
+          Hi, <%=current_user.user_name %>
 
           <%= link_to('登出', destroy_user_session_path, :method => :delete) %> |
           <%= link_to('修改密碼', edit_registration_path(:user)) %>
@@ -36,12 +36,20 @@
           <%= link_to('登入', new_session_path(:user)) %>
       <% end %>
       <% if current_user %>
-        <%= link_to '個人資料', user_profile_path(current_user.id) %>
+        <%= link_to '個人專區', user_profile_path(current_user.id) %>
+        <% if current_user.role == "admin" %>
+          您是本站管理者!!
+        <% end %>
       <% end %>
       <%= yield %>
       <p>
-      <%= link_to "後台管理 / ", admin_topics_path %>
-      <%= link_to "本站統計數據", statistic_topics_path %></p>
+
+      <% if current_user %>
+        <% if current_user.admin? %>
+          <%= link_to "後台管理 / ", admin_topics_path %>
+        <% end %>
+        <%= link_to "本站統計數據", statistic_topics_path %></p>
+      <% end %>
     </div>
   </div>
 

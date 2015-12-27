@@ -38,11 +38,13 @@
           <%= link_to('登入', new_session_path(:user)) %>
       <% end %>
       <% if current_user %>
-        <%= link_to '個人資料', user_profile_path(current_user.id) %>
+        <%= link_to '個人專區', user_profile_path(current_user.id) %>
+        <% if current_user.role == "admin" %>
+          您是管理者!!
+        <% end %>
       <% end %>
       <%= yield %>
-
-      <%= link_to "admin", admin_topics_path %>
+      <%= link_to "回到前台", topics_path %>
 
 </div>
 </div>

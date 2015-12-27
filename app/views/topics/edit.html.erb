@@ -1,6 +1,10 @@
 
 <%= form_for @topic, :url => topic_path(@topic), :method => :patch do |f| %>
   <%= render :partial => 'form', :locals =>{ :f => f } %>
-  <%= f.submit "Save", :class => "btn btn-primary" %>
-<% end %>
-
+  <% if @topic.status == "Draft" %>
+    <%= f.submit "Publish", :class => "btn btn-primary"%>
+    <%= f.submit "Draft", :class => "btn btn-primary"%>
+  <% else %>
+    <%= f.submit "Save", :class => "btn btn-primary" %>
+  <% end %>
+<% end %> 

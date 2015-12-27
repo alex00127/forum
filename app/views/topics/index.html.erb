@@ -35,14 +35,16 @@
       <td><h4>瀏覽數</h4></td>
       <td></td>
       <td></td>
-
-
+      <td></td>
   </tr>
 
 
   <% @topics.each do |t| %>
+    
     <tr>
-      <td><h4><%= link_to t.title, topic_path(t , :view =>"+1" )%></h4></td>
+      <td>
+        <h4><%= link_to t.title, topic_path(t , :view =>"+1" )%></h4>
+      </td>
       <td>
         <h5><%= link_to t.user.try(:user_name), user_profile_path(t.user.id) %></h5>
         <h5><%= t.created_at %></h5>
@@ -55,14 +57,32 @@
       <td><%= t.comment_count %></td>
       <td><%= t.comments.last.try(:created_at) %></td>
       <td><%= t.view%></td>
-      <%if t.user == current_user %>
-        <td><%= link_to "編輯", edit_topic_path(t) , :class => "btn btn-default"%>
-        <%= link_to "刪除", topic_path(t) ,:method => :delete, :class => "btn btn-danger"%></td>
-      <% end %>
+      <td>
+        <% if current_user %>
+        <%if t.user == current_user || current_user.role == "admin" %>
+          <%= link_to "編輯", edit_topic_path(t) , :class => "btn btn-default"%>
+          <%= link_to "刪除", topic_path(t) ,:method => :delete, :class => "btn btn-danger"%>
+        <% end %>
+        <%end%>
+      </td>
+      <td>
+
+          <% if current_user %>
+            <% if t.collectships.find_by_user_id(current_user.id)%>
+              <%= button_to "取消收藏", non_collect_topic_path(t) %>          
+            <%else%>
+             <%= button_to "收藏", collect_topic_path(t) %>
+            <%end%>
+          <% end %>
+
+      </td>
     </tr>
+    
   <% end %>
 
 </table>
+
+
 <%= paginate @topics %>
 
 

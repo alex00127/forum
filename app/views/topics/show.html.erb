@@ -3,10 +3,10 @@
 <p><h4>作者: <%= @topic.user.try(:user_name) %></h4> </p>
 
 <h4>分類:</h4>
+
 <ul>
 <% @topic.categories.each do |c| %>
   <h4><li><%= c.name %></li></h4>
-
 <% end %>
 </ul>
 
@@ -19,14 +19,9 @@
 <!--<p><%= link_to "Reply" , topic_path(@topic), :class => "btn btn-primary" %> 
 </p> -->
 
-<p><h3>回應(<%=@topic.comments.size%>)</h3></p>
-
-
-<% @comments.each do |c| %>
-  <p>
-    <h5><%= c.user.try(:user_name) %>:</h5>
-    
-
+  <div><h3>回應(<%=@topic.comments.size%>):</h3></div>
+  <% @comments.each do |c| %>
+    <h5><%= c.user.try(:user_name) %>:</h5>  
     <% if params[:comment_id] == c.id.to_s %>
       <%= form_for @comment, :url => topic_comment_path(@topic,@comment ) do |f| %>
         <div class = "form-group">
@@ -41,12 +36,13 @@
       <%if c.user == current_user %>
         <%= link_to "修改", topic_path( @topic,:comment_id => c ), :class => "btn btn-default" %> 
         <%= link_to "刪除", topic_comment_path( @topic,c ), :method => :delete, :class => "btn btn-danger" %> 
-      <% end %>
+      <%end%>
     <% end %>
-    
-  </p>
-  <p>---------------</p>
-<% end %>
+    <p>--------------------</p>
+  <% end %>
+  
+  
+
 
  
 
@@ -59,6 +55,7 @@
     <%= f.submit "送出" ,:class => "btn btn-primary"%>
   <% end %>   
 <% end %>
+
 
 
 <p><%= link_to "Back To Index", topics_path %></p>
