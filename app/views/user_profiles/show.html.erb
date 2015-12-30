@@ -45,7 +45,7 @@
 
 <h2>我的文章:</h2>
 <% @user.topics.each do |t|%>
-  <% if t.status == "Draft" %>
+  <% if t.draft? %>
     <ul>
     <li><%= link_to t.title, edit_topic_path(t) %> - (草稿)</li>
     </ul>
@@ -69,7 +69,7 @@
 
 <h2>收藏的文章:</h2>
 <ul>
-  <% @user.favorited_topics.each do |t| %>
+  <% @user.collected_topics.each do |t| %>
     <li><%= link_to t.title , topic_path(t)%></li>
   <%end%>
 </ul>

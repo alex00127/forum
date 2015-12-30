@@ -1,47 +1,40 @@
 class TopicCommentsController < ApplicationController
-	before_action :find_event
+	
+  before_action :authenticate_user!
+  before_action :set_topic
 
+  def create
+    @comment = Comment.new(comment_params)
+    @comment.topic = @topic
+    @comment.user = current_user
 
+    if @comment.save
+    	redirect_to topic_path(@topic)
+    else
+      render "topics/show"
+    end
+  end
 
-def create
-  @comment = @topic.comments.build(comment_params)
-  @comment.user = current_user
+  def destroy
+  	@comment = current_user.comments.find(params[:id])
+  	@comment.destroy
 
-
-  if @comment.save
-    #@topic.last_comment_time = @comment.created_at
-    @topic.comment_count = @topic.comments.size
-    @topic.save!
-  	redirect_to topic_path(@topic)
-  else
   	redirect_to topic_path(@topic)
   end
-end
 
-def destroy
-	@comment = @topic.comments.find(params[:id])
-
-	@comment.destroy
-  @topic.comment_count = @topic.comments.size
-  @topic.save!
-	redirect_to topic_path(@topic)
-end
-
-def update
-  @comment = @topic.comments.find(params[:id])
- 
-  if @comment.update(comment_params)
-    
-    redirect_to topic_path(@topic)
-  else
-    redirect_to topic_path(@topic)
+  def update
+    @comment = current_user.comments.find(params[:id])
+   
+    if @comment.update(comment_params)      
+      redirect_to topic_path(@topic)
+    else
+      render "topics/show"
+    end
   end
-end
 
-
-
-private
-  def find_event
+  private
+  
+  def set_topic
 	  @topic = Topic.find(params[:topic_id])
   end
 

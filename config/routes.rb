@@ -1,12 +1,14 @@
 Rails.application.routes.draw do
-  devise_for :users
- 
+  
+  devise_for :users, :controllers => { :omniauth_callbacks => "users/omniauth_callbacks" }
+
+
   resources :topics do
     resources :comments, :controller => 'topic_comments'
     #resources :categories, :controller => 'topic_comments'
  
     collection do
-      get :statistic
+      get :statistic  #/topics/about
     end
 
     member do
@@ -16,6 +18,7 @@ Rails.application.routes.draw do
 
   end
 
+  #這一組有一點問題, users看起來會變成跟devise不同的resource,而profile在users下面
   resources :users do
     resource :profile, :controller => 'user_profiles'
   end
@@ -25,9 +28,6 @@ Rails.application.routes.draw do
    resources :categories
    resources :users
   end
-
-  
-
 
   root 'topics#index'
   # The priority is based upon order of creation: first created -> highest priority.

@@ -1,29 +1,22 @@
 <h1>AlphaCamp Forum</h1>
-
-
 <p><%= link_to "發表文章", new_topic_path() , :class => "btn btn-primary"%></p>
 
 <h4>主題分類:
-<% Category.all.each do |c| %>
-  <%= link_to c.name+ " / ", topics_path(:category =>c)%>
-<% end %>
-<%= link_to "不分類", topics_path()%>
+  <% Category.all.each do |c| %>
+    <%= link_to c.name+ " / ", topics_path( topics_filter(:category =>c) )%>
+  <% end %>
+  <%= link_to "不分類", topics_path()%>
 </h4>
 
-<p>
-<%= link_to '照標題排列 /', topics_path( :order => "title",:category =>params[:category]) %>
-<%= link_to '照回覆數排列 /', topics_path( :order => "comment_count",:category =>params[:category]) %>
-<%= link_to '照回覆時間排列 /', topics_path( :order => "last_comment_time",:category =>params[:category]) %>
-<%= link_to '照瀏覽數排列', topics_path( :order => "view",:category =>params[:category]) %>
-</p>
-
+<%= link_to '照標題排列 /', topics_path( topics_filter(:order => "title") ) %>
+<%= link_to '照回覆數排列 /', topics_path( topics_filter(:order => "comment_count") ) %>
+<%= link_to '照回覆時間排列 /', topics_path( topics_filter( :order => "last_comment_time") )%>
+<%= link_to '照瀏覽數排列', topics_path( topics_filter(:order => "view") ) %>
 
 <%= form_tag topics_path, :method => :get do %>
   <%= text_field_tag "keyword" %>
   <%= submit_tag "搜尋文章" %>
 <% end %>
-
-
 
 <table class = "table">
   <tr>
@@ -33,21 +26,16 @@
       <td><h4>回覆數</h4></td>
       <td><h4>最新回應</h4></td>
       <td><h4>瀏覽數</h4></td>
-      <td></td>
-      <td></td>
-      <td></td>
   </tr>
 
-
   <% @topics.each do |t| %>
-    
     <tr>
       <td>
-        <h4><%= link_to t.title, topic_path(t , :view =>"+1" )%></h4>
+        <h4><%= link_to t.title, topic_path(t)%></h4>
       </td>
       <td>
         <h5><%= link_to t.user.try(:user_name), user_profile_path(t.user.id) %></h5>
-        <h5><%= t.created_at %></h5>
+        <h5><%= t.created_at.to_s(:short) %></h5>
       </td>
       <td>
         <% t.categories.each do |c| %>
@@ -55,21 +43,19 @@
         <% end %>
       </td>
       <td><%= t.comment_count %></td>
-      <td><%= t.comments.last.try(:created_at) %></td>
+      <td><%= t.last_comment_time %></td>
       <td><%= t.view%></td>
       <td>
-        <% if current_user %>
-        <%if t.user == current_user || current_user.role == "admin" %>
+        <% if t.can_edit_by?(current_user) %>
+        <%# if t.user == current_user || current_user.role == "admin" %>
           <%= link_to "編輯", edit_topic_path(t) , :class => "btn btn-default"%>
           <%= link_to "刪除", topic_path(t) ,:method => :delete, :class => "btn btn-danger"%>
-        <% end %>
-        <%end%>
+        <% end%>
       </td>
       <td>
-
           <% if current_user %>
             <% if t.collectships.find_by_user_id(current_user.id)%>
-              <%= button_to "取消收藏", non_collect_topic_path(t) %>          
+              <%=button_to "取消收藏", non_collect_topic_path(t) %>          
             <%else%>
              <%= button_to "收藏", collect_topic_path(t) %>
             <%end%>
@@ -84,6 +70,14 @@
 
 
 <%= paginate @topics %>
+
+<div
+  class="fb-like"
+  data-share="true"
+  data-width="450"
+  data-show-faces="true">
+</div>
+
 
 
 

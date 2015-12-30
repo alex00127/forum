@@ -11,16 +11,13 @@ class Admin::TopicsController < ApplicationController
     @topics = Topic.all
     @categories = Category.all
     @users = User.all
-    
-
     if params[:category_id]
-      @category = Category.find(params[:category_id])
-      
+      @category = Category.find(params[:category_id])   
     else
       @category = Category.new 
     end
 	end
-
+  
 	protected
 #  def authenticate
 #    authenticate_or_request_with_http_basic do |user_name, password|

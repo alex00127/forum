@@ -1,3 +1,5 @@
+<h1>新文章</h1>
+
 <%= form_for @topic, :url => topics_path do |f| %>
   <%= render :partial => 'form', :locals =>{ :f => f } %>
   <%= f.submit "Publish", :class => "btn btn-primary" %>

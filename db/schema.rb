@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151225030123) do
+ActiveRecord::Schema.define(version: 20151230121814) do
 
   create_table "categories", force: :cascade do |t|
     t.string   "name"
@@ -68,6 +68,10 @@ ActiveRecord::Schema.define(version: 20151225030123) do
     t.datetime "last_comment_time"
     t.integer  "view"
     t.integer  "comment_count"
+    t.string   "logo_file_name"
+    t.string   "logo_content_type"
+    t.integer  "logo_file_size"
+    t.datetime "logo_updated_at"
   end
 
   add_index "topics", ["user_id"], name: "index_topics_on_user_id"
@@ -94,9 +98,14 @@ ActiveRecord::Schema.define(version: 20151225030123) do
     t.datetime "updated_at",                          null: false
     t.string   "user_name"
     t.string   "role"
+    t.string   "fb_id"
+    t.string   "fb_token"
+    t.string   "fb_uid"
   end
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true
+  add_index "users", ["fb_id"], name: "index_users_on_fb_id"
+  add_index "users", ["fb_uid"], name: "index_users_on_fb_uid"
   add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
 
 end
