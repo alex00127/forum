@@ -16,10 +16,10 @@ class User < ActiveRecord::Base
 
   has_one :profile , dependent: :destroy
 
-  has_many :likes
+  has_many :likes, :dependent => :destroy
   has_many :liked_topics, :through => :likes, :source => :topic
 
-  has_many :subscriptions
+  has_many :subscriptions, :dependent => :destroy
   has_many :subscribed_topics, :through => :subscriptions, :source => :topic
 
   def short_name

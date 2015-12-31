@@ -11,6 +11,9 @@ class ApplicationController < ActionController::Base
     devise_parameter_sanitizer.for(:sign_up) << :user_name     
     devise_parameter_sanitizer.for(:account_update) << :user_name
   end
-
+  
+  def set_topic
+     @topic = Topic.find( params[:topic_id] )
+  end
 
 end

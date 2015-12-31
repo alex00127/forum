@@ -34,9 +34,6 @@ class TopicCommentsController < ApplicationController
 
   private
   
-  def set_topic
-	  @topic = Topic.find(params[:topic_id])
-  end
 
   def comment_params
     params.require(:comment).permit(:content, :user_id)

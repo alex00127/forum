@@ -16,8 +16,9 @@
   fjs.parentNode.insertBefore(js, fjs);
 }(document, 'script', 'facebook-jssdk'));</script>
 
-
+<!--
 <div class="fb-like" data-href="https://developers.facebook.com/docs/plugins/" data-width="500" data-layout="standard" data-action="like" data-show-faces="true" data-share="true"></div>
+-->
 
 <div class="container">
   <div class="row">
@@ -63,6 +64,12 @@
           <%= link_to "後台管理 / ", admin_topics_path %>
         <% end %>
         <%= link_to "本站統計數據", statistic_topics_path %></p>
+        <li>
+          <%= link_to "JQuery exercise", jquery_path %>
+        </li>
+        <li>
+          <%= link_to "Ajax exercise", ajax_path %>
+        </li>
       <% end %>
     </div>
   </div>
