@@ -20,6 +20,23 @@ class Topic < ActiveRecord::Base
   has_attached_file :logo, styles: { medium: "300x300>", thumb: "100x100>" }, default_url: "/images/:style/missing.png"
   validates_attachment_content_type :logo, content_type: /\Aimage\/.*\Z/
 
+  has_many :likes
+  has_many :liked_users, :through => :likes, :source => :user
+
+  has_many :subscriptions
+  has_many :subscribed_users, :through => :subscriptions, :source => :user
+
+
+
+  def find_my_like(u)
+    if u
+      self.likes.where( :user_id => u.id ).first
+    else
+      nil
+    end
+  end
+
+
   #delegate :name, :to => :category , :prefix => true, :allow_nil => true
 
   #delegate :display_name, :to => :user , :prefix => true, :allow_nil => true

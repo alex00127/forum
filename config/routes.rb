@@ -5,6 +5,7 @@ Rails.application.routes.draw do
 
   resources :topics do
     resources :comments, :controller => 'topic_comments'
+    resources :likes
     #resources :categories, :controller => 'topic_comments'
  
     collection do

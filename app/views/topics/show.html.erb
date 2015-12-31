@@ -1,5 +1,22 @@
 <h2><%= @topic.title %></h2>
 
+
+<% like = @topic.find_my_like(current_user) %>
+<% if like %>
+  <%= link_to "Unlike", topic_like_path(@topic, like), :method => :delete, :class => "btn btn-danger" %>
+<% else %>
+  <%= link_to "Like", topic_likes_path(@topic), :method => :post, :class => "btn btn-default" %>
+<% end %>
+
+<p>
+Liked by
+<% @topic.liked_users.each do |u| %>
+  <%= link_to u.user_name, user_path(u) %>,
+<% end %>
+</p>
+
+
+
 <p><h4>作者: <%= @topic.user.try(:user_name) %></h4> </p>
 
 <h4>分類:</h4>
