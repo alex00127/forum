@@ -1,6 +1,7 @@
 class TopicCommentsController < ApplicationController
 	
   before_action :authenticate_user!
+  
   before_action :set_topic
 
   def create
@@ -8,28 +9,40 @@ class TopicCommentsController < ApplicationController
     @comment.topic = @topic
     @comment.user = current_user
 
-    if @comment.save
-    	redirect_to topic_path(@topic)
-    else
-      render "topics/show"
+    #if @comment.save
+    #	redirect_to topic_path(@topic)
+    #else
+     # render "topics/show"
+    #end
+  #end
+    @comment.save
+
+    respond_to do |format|
+      format.html {redirect_to :back}
+      format.js
     end
   end
+
+
 
   def destroy
   	@comment = current_user.comments.find(params[:id])
   	@comment.destroy
 
-  	redirect_to topic_path(@topic)
+  	respond_to do |format|
+      format.html {redirect_to :back}
+      format.js
+    end
+  end
+
+  def edit
+    @comment = current_user.comments.find(params[:id])
   end
 
   def update
     @comment = current_user.comments.find(params[:id])
-   
-    if @comment.update(comment_params)      
-      redirect_to topic_path(@topic)
-    else
-      render "topics/show"
-    end
+    @comment.update(comment_params)      
+
   end
 
   private

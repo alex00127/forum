@@ -2,7 +2,7 @@
 
 <%= link_to "Ajax insert HTML", ajaxtest_path, :id =>"ajaxhtml" %>
 
-<%= link_to "Ajax Script", ajaxtest_path, :id =>"ajaxscript", :remote => true %>
+<%= link_to "Ajax Script", ajaxtest_path, :id =>"ajaxscript", :remote=>true %>
 
 <%= link_to "Ajax JSON", ajaxtest_path , :id=> "ajaxjson" %>
 
@@ -16,19 +16,17 @@
 </script>
 
 <script>
-
   $("#ajaxjson").click(function(e){
-  	e.preventDefault()
+  	e.preventDefault();
   
     var template = $('#main-template').html();
     var url = $(this).attr("href");
-
     $.ajax(url, {
-    	dataType: "json"
+    	dataType: "json",
     	success: function(data){
-    		console.log(data);
-    		 var html = template.replace("{{title}}", data["title"]);
-    		html = html.replace("{{title}}", data["title"]);
+    		console.log(data); //在dev console輸出訊息
+    		 var html = template.replace("{{title}}", data["title"]); 
+    		html = html.replace("{{content}}", data["content"]);
     		 $("#content").html(html);
     	}
     })
@@ -36,7 +34,27 @@
 
 
 
-</script
+
+  // $("#ajaxscript").click(function(e){
+  //   e.preventDefault();
+
+  //   var url =  $(this).attr("href");
+  //   $.ajax(url, {
+  //     dataType: "script"
+  //   })
+  // })
+
+  $("#ajaxhtml").click(function(e){
+    e.preventDefault();
+    var url =  $(this).attr("href");
+    $.ajax(url, {
+      success: function(response) {
+        $("#content").append(response)
+      }
+    })
+  })
+
+</script>
 
 
 

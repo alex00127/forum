@@ -1,0 +1,11 @@
+<li id="comment-<%= comment.id %>">
+  <%= comment.content %>
+  by <%= comment.user.user_name %>
+  at <%= comment.created_at.to_s(:short) %>
+  <% if comment.user == current_user %>
+    <%= link_to "修改", edit_topic_comment_path(@topic, comment), :remote => true, :class => "btn btn-default" %> 
+    <%= link_to "刪除", topic_comment_path(@topic, comment), :method => :delete, :remote => true, :class => "btn btn-danger" %>
+  <% end %>
+</li>
+
+

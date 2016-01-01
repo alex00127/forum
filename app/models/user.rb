@@ -61,4 +61,8 @@ class User < ActiveRecord::Base
      user.save!
      return user
   end
+
+  def display_name
+    user_name || email
+  end
 end

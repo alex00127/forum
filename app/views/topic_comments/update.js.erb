@@ -1,0 +1,13 @@
+<% if @comment.valid? %>
+
+  $("#comment-<%= @comment.id %>").html("<%=j render(:partial => "comment", :locals => { :comment => @comment })%>");
+  //$("#new_comment").trigger('reset');
+  //$("#comment-<%= @comment.id %>").remove();
+
+  $("#new_comment").show();
+
+<% else %>
+
+  alert("內容不能為空白");
+
+<% end %>

@@ -1,0 +1,9 @@
+<li id="comment-<%= comment.id %>">
+<%= form_for comment, :url => topic_comment_path(@topic,comment), :remote => true do |f| %>
+    <div class = "form-group">
+    <%= f.label :content, "修改回覆:" %>
+    <%= f.text_area :content ,:class => "form-control"%>
+    </div>
+    <%= f.submit "儲存" ,:class => "btn btn-primary"%>
+<% end %>   
+</li>

@@ -3,7 +3,8 @@ class WelcomesController < ApplicationController
     @todos = ["aaa","bbb","ccc"]
 	end
 
-  def ajaxtest
+def ajaxtest
+
     respond_to do |format|
       format.html{
         render :layout => false
@@ -13,6 +14,7 @@ class WelcomesController < ApplicationController
         render :json => { :title => "ABC", :content => "XYZ" }
       }
     end
-  end
+end
+
 
 end

@@ -1,10 +1,8 @@
 <h2><%= @topic.title %></h2>
 
-<% if @topic.find_my_subscription(current_user) %>
-  <%= link_to "UnSubscribe", unsubscribe_topic_path(@topic), :method => :post, :class => "btn btn-danger" %>
-<% else %>
-  <%= link_to "Subscribe", subscribe_topic_path(@topic), :method => :post, :class => "btn btn-default" %>
-<% end %>
+<span id="subscript-block">
+  <%= render "subscribe" %>
+</span>
 
 
 <% like = @topic.find_my_like(current_user) %>
@@ -45,29 +43,14 @@ Liked by
 
 <div><h3>回應(<%=@topic.comments.size%>):</h3></div>
 
-<% @comments.each do |c| %>
-  <h5><%= c.user.try(:user_name) %>:</h5>  
-  <% if params[:comment_id] == c.id.to_s %>
-    <%= form_for @comment, :url => topic_comment_path(@topic, @comment) do |f| %>
-      <div class = "form-group">
-      <!--<%= f.label :content, "修改" %> -->
-      <%= f.text_area :content ,:class => "form-control"%>
-      </div>
-      <%= f.submit "儲存", :class => "btn btn-primary"%>
-    <% end %>
-  <% else %>
-    <p><%=  simple_format(c.content) %></p>
-    <p>於:<%= c.updated_at %></p>
-    <%if c.user == current_user %>
-      <%= link_to "修改", topic_path(:comment_id => c ), :class => "btn btn-default" %> 
-      <%= link_to "刪除", topic_comment_path( @topic,c ), :method => :delete, :class => "btn btn-danger" %> 
-    <%end%>
+<ul id="comment-list">
+  <% @topic.comments.each do |c| %>
+    <%= render :partial => "topic_comments/comment", :locals => {:comment =>c }%>
   <% end %>
-  <p>--------------------</p>
-<% end %>
+</ul>
 
 <% unless params[:comment_id] %>
-  <%= form_for @comment, :url => topic_comments_path(@topic) do |f| %>
+  <%= form_for @comment, :url => topic_comments_path(@topic), :remote => true do |f| %>
     <div class = "form-group">
     <%= f.label :content, "回覆.." %>
     <%= f.text_area :content ,:class => "form-control"%>
@@ -77,7 +60,6 @@ Liked by
 <% end %>
 
 <p><%= link_to "Back To Index", topics_path %></p>
-
 
 
 
